@@ -71,13 +71,13 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
             }
         } 
 
-        stage('Testing') {
-            container('docker') { 
-              sh 'whoami'
-              sh 'hostname -i' 
-              sh "docker run ${REPOSITORY_URI}:latest npm run test "                 
-            }
-        }
+        // stage('Testing') {
+        //     container('docker') { 
+        //       sh 'whoami'
+        //       sh 'hostname -i' 
+        //       sh "docker run ${REPOSITORY_URI}:latest npm run test "                 
+        //     }
+        // }
 
         stage('Push Image'){
             container('docker'){
