@@ -38,7 +38,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
   ) {
     node('mypod') {
 
-        def REPOSITORY_URI = "joedayz/foodapp-nodejs"
+        def REPOSITORY_URI = "joedayz/node-app"
 
         stage('Get latest version of code') {
           checkout scm
@@ -64,7 +64,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
 
               withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker login --username="${USERNAME}" --password="${PASSWORD}"'
-                sh "docker build -t ${REPOSITORY_URI}:${BUILD_NUMBER} ."
+                sh "docker build -t ${REPOSITORY_URI}:latest ."
                 sh 'docker image ls' 
               } 
                 
@@ -75,7 +75,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
             container('docker') { 
               sh 'whoami'
               sh 'hostname -i' 
-              sh "docker run ${REPOSITORY_URI}:${BUILD_NUMBER} npm run test "                 
+              sh "docker run ${REPOSITORY_URI}:latest npm run test "                 
             }
         }
 
@@ -83,7 +83,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
             container('docker'){
               withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker image ls'
-                sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER}"
+                sh "docker push ${REPOSITORY_URI}:latest"
               }                 
             }
         }      
