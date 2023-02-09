@@ -39,6 +39,8 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
     node('mypod') {
 
         def REPOSITORY_URI = "joedayz/node-app"
+        def HELM_APP_NAME= "node-app-chart"
+        def HELM_CHART_DIRECTORY= "k8s/node-app-chart"
 
         stage('Get latest version of code') {
           checkout scm
@@ -86,6 +88,15 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
                 sh "docker push ${REPOSITORY_URI}:latest"
               }                 
             }
-        }      
+        }   
+
+        stage('Deploy Image to k8s'){
+            container('helm'){
+                sh 'helm list'
+                sh "helm lint ./${HELM_CHART_DIRECTORY}"
+                sh "helm upgrade --wait --timeout 60 --set image.tag=latest ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}"
+                sh "helm list | grep ${HELM_APP_NAME}"
+            }
+        }                 
     }
 }
