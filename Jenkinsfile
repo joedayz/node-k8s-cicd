@@ -93,7 +93,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
             container('helm'){
                 sh 'helm list -n jenkins'
                 sh "helm lint ./${HELM_CHART_DIRECTORY}"
-                sh "helm upgrade --install ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY} -n jenkins --wait"
+                sh "helm upgrade --install ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY} -n jenkins --wait --timeout 60"
                 sh "helm list | grep ${HELM_APP_NAME}"
             }
         }                 
