@@ -1,4 +1,4 @@
-podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [ 
+podTemplate(label: 'mypod', serviceAccount: 'jenkins-ci', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
@@ -21,7 +21,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
     ),
     containerTemplate(
       name: 'helm', 
-      image: 'alpine/helm:2.14.0', 
+      image: 'alpine/helm:3.1.1', 
       resourceRequestCpu: '100m',
       resourceLimitCpu: '300m',
       resourceRequestMemory: '300Mi',
