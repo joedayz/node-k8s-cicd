@@ -1,4 +1,4 @@
-podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [ 
+podTemplate(label: 'mypod', serviceAccount: 'jenkins-helm', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
@@ -92,10 +92,19 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
 
         stage('Deploy Image to k8s'){
             container('helm'){
-                sh 'helm list -n jenkins'
-                sh "helm lint ./${HELM_CHART_DIRECTORY}"
-                sh "helm upgrade --install --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY} -n jenkins --wait --timeout 10m"
-                sh "helm list | grep ${HELM_APP_NAME}"
+                // sh 'helm list -n jenkins'
+                // sh "helm lint ./${HELM_CHART_DIRECTORY}"
+                // sh "helm upgrade --install --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY} -n jenkins --wait --timeout 10m"
+                // sh "helm list | grep ${HELM_APP_NAME}"
+
+                sh '''
+                DEPLOYED=$(helm list |grep -E "^${HELM_APP_NAME}" |grep DEPLOYED |wc -l)
+                if [ $DEPLOYED == 0 ] ; then
+                  helm install --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}
+                else
+                  helm upgrade --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}
+                fi
+                '''
             }
         }                 
     }
