@@ -21,7 +21,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
     ),
     containerTemplate(
       name: 'helm', 
-      image: 'alpine/helm:3.1.1', 
+      image: 'alpine/helm:3.10.2', 
       resourceRequestCpu: '100m',
       resourceLimitCpu: '300m',
       resourceRequestMemory: '300Mi',
@@ -56,6 +56,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
                 sh 'kubectl get pods -n default'  
             }
             container('helm') { 
+                sh 'helm version'
                 sh 'helm list -n jenkins'     
             }
         }  
