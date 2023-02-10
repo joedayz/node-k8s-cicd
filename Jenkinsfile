@@ -66,7 +66,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
 
               withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker login --username="${USERNAME}" --password="${PASSWORD}"'
-                sh "docker build -t ${REPOSITORY_URI}:latest ."
+                sh "docker build -t ${REPOSITORY_URI}:${BUILD_NUMBER} ."
                 sh 'docker image ls' 
               } 
                 
@@ -85,7 +85,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
             container('docker'){
               withCredentials([usernamePassword(credentialsId: 'docker-login', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker image ls'
-                sh "docker push ${REPOSITORY_URI}:latest"
+                sh "docker push ${REPOSITORY_URI}:${BUILD_NUMBER}"
               }                 
             }
         }   
@@ -94,7 +94,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
             container('helm'){
                 sh 'helm list -n jenkins'
                 sh "helm lint ./${HELM_CHART_DIRECTORY}"
-                sh "helm upgrade --install ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY} -n jenkins --wait --timeout 10m"
+                sh "helm upgrade --install --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY} -n jenkins --wait --timeout 10m"
                 sh "helm list | grep ${HELM_APP_NAME}"
             }
         }                 
