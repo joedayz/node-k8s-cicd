@@ -91,9 +91,9 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
 
         stage('Deploy Image to k8s'){
             container('helm'){
-                sh 'helm list'
+                sh 'helm list -n jenkins'
                 sh "helm lint ./${HELM_CHART_DIRECTORY}"
-                sh "helm upgrade --wait --set image.tag=latest ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}" -n default
+                sh "helm upgrade --wait --set image.tag=latest ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}" 
                 sh "helm list | grep ${HELM_APP_NAME}"
             }
         }                 
