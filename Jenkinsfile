@@ -100,7 +100,11 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
                 
                 sh '''
                 DEPLOYED=$(helm list |grep -E "^$HELM_APP_NAME" |grep DEPLOYED |wc -l)
-                echo $DEPLOYED
+                if [ $DEPLOYED == 0 ] ; then
+                  helm install $HELM_APP_NAME ./$HELM_CHART_DIRECTORY
+                else
+                  helm upgrade $HELM_APP_NAME ./$HELM_CHART_DIRECTORY
+                fi
                 '''
             }
         }                 
