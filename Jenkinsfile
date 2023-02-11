@@ -43,7 +43,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
         def HELM_CHART_DIRECTORY= "k8s/node-app-chart"
 
         stage('Get latest version of code') {
-          checkout scm
+          //checkout scm
         }
         stage('Check running containers') {
             container('docker') {  
