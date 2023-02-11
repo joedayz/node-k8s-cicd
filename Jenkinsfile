@@ -98,7 +98,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
                 // sh "helm list | grep ${HELM_APP_NAME}"
 
                 sh """
-                DEPLOYED=$(helm list |grep -E "^$HELM_APP_NAME" |grep DEPLOYED |wc -l)
+                DEPLOYED=$(helm list |grep -E "^node-app-chart" |grep DEPLOYED |wc -l)
                 echo $DEPLOYED
                 """
             }
