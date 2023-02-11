@@ -97,9 +97,9 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
                 // sh "helm upgrade --install --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY} -n jenkins --wait --timeout 10m"
                 // sh "helm list | grep ${HELM_APP_NAME}"
 
-                sh "DEPLOYED=$(helm list |grep -E "^${HELM_APP_NAME}" |grep DEPLOYED |wc -l)"
-                sh '''
                 
+                sh '''
+                DEPLOYED=$(helm list |grep -E '^${HELM_APP_NAME}' |grep DEPLOYED |wc -l)
                 echo $DEPLOYED
                 '''
             }
