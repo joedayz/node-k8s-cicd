@@ -1,4 +1,4 @@
-podTemplate(label: 'mypod', serviceAccount: 'jenkins-helm', containers: [ 
+podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [ 
     containerTemplate(
       name: 'docker', 
       image: 'docker', 
@@ -57,7 +57,7 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins-helm', containers: [
             }
             container('helm') { 
                 sh 'helm version'
-                sh 'helm list -n jenkins'     
+                sh 'helm list'     
             }
         }  
 
