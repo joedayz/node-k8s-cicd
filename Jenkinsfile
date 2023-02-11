@@ -99,13 +99,14 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
 
                 
                 sh '''
-                DEPLOYED=$(helm list |grep -E "^$HELM_APP_NAME" |grep DEPLOYED |wc -l)
+                DEPLOYED=$(helm list |grep -E "^node-app-chart" |grep DEPLOYED |wc -l)
                 if [ $DEPLOYED == 0 ] ; then
-                  helm install $HELM_APP_NAME ./$HELM_CHART_DIRECTORY
+                  helm install node-app-chart ./k8s/node-app-chart
                 else
-                  helm upgrade $HELM_APP_NAME ./$HELM_CHART_DIRECTORY
+                  helm upgrade node-app-chart ./k8s/node-app-chart
                 fi
                 '''
+
             }
         }                 
     }
