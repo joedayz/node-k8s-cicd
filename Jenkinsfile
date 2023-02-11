@@ -98,11 +98,11 @@ podTemplate(label: 'mypod', serviceAccount: 'jenkins', containers: [
                 // sh "helm list | grep ${HELM_APP_NAME}"
 
                 sh '''
-                DEPLOYED=$(helm list |grep -E "^${HELM_APP_NAME}" |grep DEPLOYED |wc -l)
+                DEPLOYED=$(helm list |grep -E "^$HELM_APP_NAME" |grep DEPLOYED |wc -l)
                 if [ $DEPLOYED == 0 ] ; then
-                  helm install --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}
+                  helm install --set image.tag=$BUILD_NUMBER $HELM_APP_NAME ./$HELM_CHART_DIRECTORY
                 else
-                  helm upgrade --set image.tag=${BUILD_NUMBER} ${HELM_APP_NAME} ./${HELM_CHART_DIRECTORY}
+                  helm upgrade --set image.tag=$BUILD_NUMBER $HELM_APP_NAME ./$HELM_CHART_DIRECTORY
                 fi
                 '''
             }
